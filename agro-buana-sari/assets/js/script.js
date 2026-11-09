@@ -1,1 +1,0 @@
-document.addEventListener('DOMContentLoaded',()=>{const toggle=document.querySelector('.menu-toggle'),nav=document.querySelector('#mainNav');if(toggle&&nav){toggle.addEventListener('click',()=>nav.classList.toggle('show'));nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('show')));}});
