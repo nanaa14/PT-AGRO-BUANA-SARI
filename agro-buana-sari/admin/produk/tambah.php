@@ -1,0 +1,9 @@
+<?php
+require_once '../inc/auth.php'; require_once '../../config/koneksi.php'; $title='Tambah Produk'; $error='';
+if($_SERVER['REQUEST_METHOD']==='POST'){
+ $nama=trim($_POST['nama_produk']??''); $des=trim($_POST['deskripsi']??''); $stok=max(0,(int)($_POST['stok']??0)); $foto='';
+ if($nama==='') $error='Nama produk wajib diisi.';
+ if(!$error && !empty($_FILES['foto']['name'])) { require_once '../../inc/upload.php'; $up=upload_image($_FILES['foto'],'../../uploads/produk/'); if(!$up['ok']) $error=$up['error']; else $foto=$up['name']; }
+ if(!$error){$s=$conn->prepare("INSERT INTO produk(nama_produk,deskripsi,foto,stok) VALUES(?,?,?,?)");$s->bind_param('sssi',$nama,$des,$foto,$stok);$s->execute();header('Location:index.php');exit;}
+}
+include '../inc/header.php'; ?><div class="page-title"><h1>Tambah Produk</h1></div><div class="form-card"><?php if($error): ?><div class="alert"><?=htmlspecialchars($error)?></div><?php endif; ?><form method="post" enctype="multipart/form-data"><div class="form-group"><label>Nama Produk</label><input name="nama_produk" value="<?=htmlspecialchars($_POST['nama_produk']??'')?>" required></div><div class="form-group"><label>Stok Awal</label><input type="number" name="stok" min="0" value="<?=htmlspecialchars($_POST['stok']??0)?>" required></div><div class="form-group"><label>Deskripsi</label><textarea name="deskripsi" required><?=htmlspecialchars($_POST['deskripsi']??'')?></textarea></div><div class="form-group"><label>Foto Produk</label><input type="file" name="foto" accept="image/jpeg,image/png,image/webp"><p class="help">JPG/PNG/WEBP, maksimal 2 MB.</p></div><button class="btn green">Simpan</button> <a class="btn gray" href="index.php">Batal</a></form></div><?php include '../inc/footer.php'; ?>

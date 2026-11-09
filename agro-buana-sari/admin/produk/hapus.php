@@ -1,0 +1,3 @@
+<?php
+require_once '../inc/auth.php';require_once '../../config/koneksi.php';$id=(int)($_GET['id']??0);$s=$conn->prepare("SELECT foto FROM produk WHERE id=?");$s->bind_param('i',$id);$s->execute();$d=$s->get_result()->fetch_assoc();if($d){$s=$conn->prepare("DELETE FROM produk WHERE id=?");$s->bind_param('i',$id);$s->execute();if($d['foto']&&file_exists('../../uploads/produk/'.$d['foto']))@unlink('../../uploads/produk/'.$d['foto']);}header('Location:index.php');exit;
+?>
